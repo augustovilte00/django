@@ -1,0 +1,4 @@
+python manage.py startapp empleados   
+.\venv\Scripts\activate 
+python manage.py makemigrations empleados
+python manage.py migrate
