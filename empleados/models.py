@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password, is_password_usable
+from django.contrib.auth.hashers import make_password
 
 class Empleado(models.Model):
     dni_empl = models.CharField(max_length=20, unique=True)
@@ -10,19 +10,13 @@ class Empleado(models.Model):
     correo_empl = models.EmailField(unique=True)
     password = models.CharField(max_length=128)  # Cifrada con Django
     admin = models.BooleanField(default=False)  # False = Usuario normal, True = Admin
+    is_active = models.BooleanField(default=True)  # Indica si la cuenta está activa
 
-    def __str__(self):
+    def str(self):
         return f"{self.nombre_empl} {self.apellido_empl}"
 
-    from django.db import models
-
     def save(self, *args, **kwargs):
-        if self.password and (
-            not self.pk or  # Es un nuevo registro
-            'password' in self.get_dirty_fields()  # El password ha cambiado
-        ):
-            # Verifica si el password ya está hasheado
-            if not self.password.startswith('pbkdf2_sha256$'):
-                self.password = make_password(self.password)
-        
+    # Cifrado de contraseña si no está cifrada
+        if self.password and not self.password.startswith('pbkdf2_sha256$'):
+            self.password = make_password(self.password)
         super().save(*args, **kwargs)

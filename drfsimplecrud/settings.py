@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'sesiones',
     'corsheaders',
     'rest_framework_simplejwt',
+    'caja',
 
 ]
 
